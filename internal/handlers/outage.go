@@ -69,8 +69,8 @@ func (h *OutageHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		subject,
 		description,
 		"HIGH",
-		4,  // Outage ticket group ID
-		2,  // Outage inbound mailbox ID
+		3,  // Support ticket group ID
+		1,  // Support inbound mailbox ID
 		form.Email,
 		fullName,
 	)

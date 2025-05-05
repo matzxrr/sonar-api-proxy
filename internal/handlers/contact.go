@@ -67,8 +67,8 @@ func (h *ContactHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		subject,
 		description,
 		"MEDIUM",
-		3,  // Contact ticket group ID
-		1,  // Contact inbound mailbox ID
+		3,  // Support ticket group ID
+		1,  // Support inbound mailbox ID
 		form.Email,
 		fullName,
 	)
