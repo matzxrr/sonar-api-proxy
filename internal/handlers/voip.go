@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"kellin/sonar-api-proxy/internal/models"
@@ -59,7 +60,7 @@ func (h *VoIPHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	fullName := fmt.Sprintf("%s %s", form.FirstName, form.LastName)
 	
 	// Create ticket
-	err := h.sonarClient.CreateTicket(
+	ticketID, err := h.sonarClient.CreateTicket(
 		subject,
 		description,
 		"MEDIUM",
@@ -73,10 +74,16 @@ func (h *VoIPHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+    if err := h.sonarClient.ResendAutoreply(ticketID, form.Email); err != nil {
+        // Log the error but don't fail the request
+        log.Printf("Warning: Failed to send autoreply for ticket %d: %v", ticketID, err)
+    }
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"success": true,
 		"message": "VoIP support request submitted successfully",
+		"ticket_id": ticketID,
 	})
 }
