@@ -74,6 +74,7 @@ func (h *ContactHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		fullName,
 	)
 	if err != nil {
+		log.Printf("error creating ticket: %v", err)
 		http.Error(w, "Failed to create ticket", http.StatusInternalServerError)
 		return
 	}
